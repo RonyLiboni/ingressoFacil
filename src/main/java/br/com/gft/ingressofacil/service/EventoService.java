@@ -4,13 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Date;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import br.com.gft.ingressofacil.model.CasaDeShow;
 import br.com.gft.ingressofacil.model.Evento;
