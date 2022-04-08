@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{menu-template :: head}"></head>
+<header th:replace="~{Admin/menu-template-adm :: header-adm}"></header>
+<body>
+	<div >
+		<div class="alert alert-danger" th:if="${#lists.isEmpty(listaCasaDeShow)}">
+		Cadastre casas de show para poder adicionar eventos!
+		</div>
+		<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+		<div class="card col-4 mt-2">
+		<div class="card-header">
+			<h4 class="text-primary">Cadastrar nova casa de show!</h4>
+		</div>
+		<div class="card-body">
+			<form method="POST" th:object="${casaDeShow}" th:action="@{/casaDeShow/cadastrar}">
+				<input type="hidden" th:field="${casaDeShow.id}">
+				
+				<div class="form-group mb-3">
+					<label for="nome">Nome:</label>
+					<input th:field="${casaDeShow.nomeCasa}" th:errorclass="is-invalid" class="form-control" 
+											type="text" placeholder="nome da Casa de Show"/>
+					<div class="alert alert-danger" th:if="${#fields.hasErrors('nomeCasa')}" th:errors="${casaDeShow.nomeCasa}"></div>
+
+				</div>
+				<div class="form-group mb-3">
+					<label for="endereco">Endereço:</label>
+					<input
+						class="form-control" type="text" th:field="${casaDeShow.endereco}" th:errorclass="is-invalid" placeholder="Qual o endereço da casa? ex: Avenida Paulista, 8588"></input>
+					<div class="alert alert-danger" th:if="${#fields.hasErrors('endereco')}" th:errors="${casaDeShow.endereco}"></div>
+				</div>
+				
+				<button type="submit" class="btn btn-primary">Salvar</button>
+			</form>
+		</div>
+		
+	</div>
+		
+		<div th:if="${#lists.isEmpty(listaCasaDeShow)}">
+		<a class="btn btn-primary btn-sm mb-2 mt-2" th:href="@{/casaDeShow/inserirCasasDeShow}">
+		Popular banco com casas de show</a>
+		</div>
+		
+		<div th:if="${not #lists.isEmpty(listaCasaDeShow)}">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Nome</th>
+						<th>Endereço</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="casa : ${listaCasaDeShow}">
+						<td th:text="${casa.id}"></td>
+						<td th:text="${casa.nomeCasa}"></td>
+						<td th:text="${casa.endereco}"></td>
+						<td><a class="btn btn-primary btn-sm mb-2" 
+							th:href="@{/casaDeShow/editar(id=${casa.id})}">Editar</a>
+							<a class="btn btn-primary btn-sm mb-2"
+							th:href="@{/casaDeShow/deletar(id=${casa.id})}"
+							onclick="return confirm('Você realmente deseja excluir?')">Excluir</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+		
+	<div th:replace="~{menu-template :: scripts}"></div>
+</body>
+</html>

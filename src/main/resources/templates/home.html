@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{menu-template :: head}"></head>
+
+
+<div sec:authorize="!isAuthenticated()"><header th:replace="~{menu-template :: header-usuarioNaoLogado}"></header></div>
+<div sec:authorize="hasRole('ROLE_ADM')"><header th:replace="~{Admin/menu-template-adm :: header-adm}"></header></div>
+<div sec:authorize="hasRole('ROLE_USER')"><header th:replace="~{Cliente/menu-template-cliente :: header-cliente}"></header></div>
+
+<body>
+	
+	<h3 class="text-center" sec:authorize="isAuthenticated()">Bem vindo! <span sec:authentication="name"></span></h3>
+	<div class="alert alert-danger" th:if="${#lists.isEmpty(listaEventos)}">
+	No momento, não há eventos disponíveis! 
+	</div>
+
+	<div class="container text-left row mt-2" th:each="evento : ${listaEventos}">
+		 <div class="row">
+		  <div class="col-sm-6">
+		    <div class="card">
+		      <div class="card-body">
+  		      	<img class="card-img-side img-thumbnail" width=50% align="right" th:src="${evento.imagemDoEvento}" src="">
+		        <h5 class="card-title"><span th:text="${evento.nomeEvento}"></span></h5>
+		        <p class="card-text">Data: <span th:text="${#temporals.format(evento.dataEvento, 'dd/MM/yyyy')}"/> as <span th:text="${evento.horaEvento}"></span> </p>
+		        <p class="card-text">Ingressos restantes: <span th:text="${evento.quantidadeIngressosDisponiveis}"></p>
+		        <p class="card-text">Preço: <span th:text="'R$' + ${#numbers.formatDecimal(evento.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></p>
+		        <p class="card-text">Local: <span th:text="${evento.casaDeShow}"></p>
+		        <p class="card-text">Gênero: <span th:text="${evento.generoMusical}"></p>
+		        		    	
+		          	 
+		       	 
+		       	 
+		       	 <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-primary text-center" 
+		        	onclick="return confirm('Você precisa estar logado para comprar!')">Comprar ingresso</a>
+		       	 
+		       	 <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/comprar(id=${evento.id})}" 
+		       	 class="btn btn-primary text-center" >Comprar ingresso</a>
+		       	     		        
+		        <a sec:authorize="hasRole('ROLE_ADM')" href="#" class="btn btn-primary text-center" 
+		        	onclick="return confirm('botão ilustrativo, ADMs precisam comprar através de uma conta de usuário, beleza?')">Comprar ingresso</a>
+		        
+		        
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
+	<div th:replace="~{menu-template :: scripts}"></div>
+</body>
+</html>

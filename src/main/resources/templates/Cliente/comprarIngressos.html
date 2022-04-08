@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="~{menu-template :: head}"></head>
+
+<div sec:authorize="hasRole('ROLE_USER')"><header th:replace="~{Cliente/menu-template-cliente :: header-cliente}"></header></div>
+
+<body>
+	
+	<div class="container text-left row mt-2" th:object="${evento}">
+		 <div class="row">
+		  <div class="col-sm-6">
+		    <div class="card">
+		      <div class="card-body">
+  		      	<img class="card-img-side img-thumbnail" width=50% align="right" th:src="${evento.imagemDoEvento}" src="">
+		        <h5 class="card-title"><span th:text="${evento.nomeEvento}"></span></h5>
+		        <p class="card-text">Data: <span th:text="${#temporals.format(evento.dataEvento, 'dd/MM/yyyy')}"/> as <span th:text="${evento.horaEvento}"></span> </p>
+		        <p class="card-text">Ingressos restantes: <span th:text="${evento.quantidadeIngressosDisponiveis}"></p>
+		        <p class="card-text">Preço unitário: <span th:text="'R$' + ${#numbers.formatDecimal(evento.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></p>
+		        <p class="card-text">Local: <span th:text="${evento.casaDeShow}"></p>
+		        
+		         	 
+		       	 <form method="POST" th:object="${ingresso}" th:action="@{/comprar/resumoCompra}">
+																
+						<div class="form-group mb-3">
+							<label for="qtdIngressos">Quantidade</label>
+							<input	name="qtdIngressos" class="form-control"  required type="number" th:errorclass="is-invalid" 
+							th:field="${ingresso.quantidadeIngressosComprados}" placeholder="Quantos ingressos você quer comprar?"></input>
+							<div class="alert alert-danger"
+								th:if="${#fields.hasErrors('quantidadeIngressosComprados')}"
+								th:errors="${evento.quantidadeIngressos}"></div>
+						</div>
+						<button type="submit" class="btn btn-primary">Ir para resumo da compra</button>
+				</form>         
+
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
+	<div th:replace="~{menu-template :: scripts}"></div>
+</body>
+</html>

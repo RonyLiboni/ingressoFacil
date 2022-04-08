@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{menu-template :: head}"></head>
+<header th:replace="~{Admin/menu-template-adm :: header-adm}"></header>
+<body>
+	<div>
+		<div class="alert alert-danger"
+			th:if="${#lists.isEmpty(listaCasaDeShow)}">
+			Para cadastrar um evento, é necessário ter pelo menos uma casa de
+			show cadastrada! <br> <a class="btn btn-primary btn-sm"
+				th:href="@{/casaDeShow}"> Clique aqui para cadastrar uma casa de
+				show!</a>
+		</div>
+		<div th:if="${not #lists.isEmpty(listaCasaDeShow)}">
+			<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+			<div class="card col-4 mt-2">
+				<div class="card-header">
+					<h4 class="text-primary">Cadastrar um novo evento!</h4>
+				</div>
+				<div class="card-body">
+					<form method="POST" th:object="${evento}" th:action="@{/evento/cadastrar}">
+						<input type="hidden" th:field="${evento.id}">
+						
+						<div class="form-group mb-3">
+							<label for="nomeEvento">Nome:</label>
+							<input class="form-control" th:errorclass="is-invalid" type="text" th:field="${evento.nomeEvento}" placeholder="nome do evento"></input>
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('nomeEvento')}"	th:errors="${evento.nomeEvento}"></div>
+						</div>
+						
+						<div class="form-group mb-3">
+							<label for="quantidadeIngressos">Capacidade:</label>
+							<input	class="form-control" type="number" th:errorclass="is-invalid" th:field="${evento.quantidadeIngressos}" placeholder="Quantos ingressos estarão a venda?"></input>
+							<div class="alert alert-danger"
+								th:if="${#fields.hasErrors('quantidadeIngressos')}"
+								th:errors="${evento.quantidadeIngressos}"></div>
+						</div>
+						
+						<div class="form-group mb-3">
+							<label for="dataEvento">Data do evento:</label>
+							<input class="form-control" th:errorclass="is-invalid" type="date" th:field="${evento.dataEvento}" placeholder="Quantos ingressos estarão a venda?"></input>
+							<div class="alert alert-danger"	th:if="${#fields.hasErrors('dataEvento')}" th:errors="${evento.dataEvento}"></div>
+						</div>
+						
+						<div class="form-group mb-3">
+							<label for="horaEvento">hora do evento:</label>
+							<input class="form-control" th:errorclass="is-invalid" type="time" th:field="${evento.horaEvento}" placeholder="Quantos ingressos estarão a venda?"></input>
+							<div class="alert alert-danger"	th:if="${#fields.hasErrors('horaEvento')}" th:errors="${evento.horaEvento}"></div>
+						</div>
+						
+						<div class="form-group mb-3">
+							<label for="valorIngresso">Valor do Ingresso:</label>
+							<input class="form-control" th:errorclass="is-invalid" step="0.01" min="0.01" type="number" th:field="${evento.valorIngresso}"	placeholder="Quantos ingressos estarão a venda?"></input>
+							<div class="alert alert-danger"	th:if="${#fields.hasErrors('valorIngresso')}" th:errors="${evento.valorIngresso}"></div>
+						</div>
+
+						<div class="form-group mb-3">
+							<label for="nomeCasa">Casa de Show</label>
+							<select	class="form-select" th:field="${evento.casaDeShow}">
+								<option th:each="casa: ${listaCasaDeShow}" th:value="${casa.id}"
+									th:text="${casa.nomeCasa}" />
+							</select>
+						</div>
+
+						<div class="form-group mb-3">
+							<label for="generoMusical">Gênero musical</label> <select
+								class="form-select" th:field="${evento.generoMusical}">
+								<option
+									th:each="generoOpt: ${T(br.com.gft.ingressofacil.model.GeneroMusical).values()}"
+									th:value="${generoOpt}" th:text="${generoOpt}" />
+							</select>
+						</div>
+						
+						<div class="form-group mb-3">
+							<label for="imagemDoEvento">Url da imagem do evento:</label>
+							<input class="form-control" type="text" th:field="${evento.imagemDoEvento}" placeholder="Cole uma URL com a foto que deseja para o evento"></input>
+						</div>
+						
+						<button type="submit" class="btn btn-primary">Salvar</button>
+					</form>
+			</div>
+		</div>
+		
+		<div th:if="${#lists.isEmpty(listaEventos)}">
+			<a class="btn btn-primary btn-sm mb-2 mt-2" th:href="@{/evento/inserirEventos}">
+			Popular banco com eventos
+			</a>
+		</div>
+		
+		<div th:if="${not #lists.isEmpty(listaEventos)}">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Evento</th>
+						<th>Data</th>
+						<th>Capacidade</th>
+						<th>Preço do Ingresso</th>
+						<th>Casa de show</th>
+						<th>Genero musical</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="evento : ${listaEventos}">
+						<td th:text="${evento.id}"></td>
+						<td th:text="${evento.nomeEvento}"></td>
+						<td><span th:text="${#temporals.format(evento.dataEvento, 'dd/MM/yyyy')}"/> as <span th:text="${evento.horaEvento}"></span></td>
+						<td th:text="${evento.quantidadeIngressos}"></td>
+						<td th:text="'R$' + ${#numbers.formatDecimal(evento.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></td>
+						<td th:text="${evento.casaDeShow}"></td>
+						<td th:text="${evento.generoMusical}"></td>
+
+						<td><a class="btn btn-primary btn-sm"
+							th:href="@{/evento/editar(id=${evento.id})}">Editar</a> <a
+							class="btn btn-primary btn-sm"
+							th:href="@{/evento/deletar(id=${evento.id})}"
+							onclick="return confirm('Você realmente deseja excluir esse evento?')">Excluir</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+
+	</div>
+	<div th:replace="~{menu-template :: scripts}"></div>
+</body>
+</html>
