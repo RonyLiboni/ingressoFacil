@@ -96,7 +96,7 @@
 						<th>Capacidade</th>
 						<th>Preço do Ingresso</th>
 						<th>Casa de show</th>
-						<th>Genero musical</th>
+						<th>Numero de ingressos vendidos</th>
 						<th>Ações</th>
 					</tr>
 				</thead>
@@ -108,7 +108,7 @@
 						<td th:text="${evento.quantidadeIngressos}"></td>
 						<td th:text="'R$' + ${#numbers.formatDecimal(evento.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></td>
 						<td th:text="${evento.casaDeShow}"></td>
-						<td th:text="${evento.generoMusical}"></td>
+						<td th:text="${evento.quantidadeIngressosVendidos}"></td>
 
 						<td><a class="btn btn-primary btn-sm"
 							th:href="@{/evento/editar(id=${evento.id})}">Editar</a> <a

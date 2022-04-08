@@ -14,8 +14,15 @@ public class Ingresso {
 	@NotNull
 	private Integer quantidadeIngressosComprados;
 	private BigDecimal totalDaCompra;
+	private String ImagemDoEvento;
 	
 	
+	public String getImagemDoEvento() {
+		return ImagemDoEvento;
+	}
+	public void setImagemDoEvento(String imagemDoEvento) {
+		ImagemDoEvento = imagemDoEvento;
+	}
 	public String getNomeEvento() {
 		return nomeEvento;
 	}

@@ -42,11 +42,13 @@ public class EventoController {
 	
 	@PostMapping("cadastrar")
 	public String cadastrarEvento(@Valid Evento evento,BindingResult result, Model model ) {
+		evento.setQuantidadeIngressosDisponiveis(evento.getQuantidadeIngressos());
+		
 		if(result.hasErrors()) 
 			return listarEventos(model, evento);
 		
 		if(evento.getImagemDoEvento().equals(null) 
-				|| evento.getImagemDoEvento().equals("") )
+				|| evento.getImagemDoEvento().equals("") ) //se o adm nao colocar uma imagem essa é a padrao
 			evento.setImagemDoEvento("https://ancoracomunicacao.com.br/images/up/News/72/1200x800-1/72a50b5-musica-1200x1200.jpg");
 				
 		try {
@@ -62,6 +64,7 @@ public class EventoController {
 	@GetMapping("editar")
 	public String editarEvento(Long id, Model model) {
 		Evento evento = eventoService.acharPeloId(id);
+		model.addAttribute("qtdIngressosVendidos", evento.getQuantidadeIngressosVendidos());
 		model.addAttribute("evento", evento);		
 		model.addAttribute("mensagem", "Agora você pode alterar os dados que precisa!");
 		return listarEventos(model, evento);

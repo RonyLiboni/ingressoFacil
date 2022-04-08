@@ -42,7 +42,7 @@ public class Evento {
 	private LocalTime horaEvento;
 	@NotNull @Digits(fraction=0 ,integer =10)
 	private Integer quantidadeIngressos;
-	private Integer quantidadeIngressosVendidos;
+	private Integer quantidadeIngressosVendidos=0;
 	private Integer quantidadeIngressosDisponiveis;
 	private String imagemDoEvento;
 		
@@ -114,16 +114,6 @@ public class Evento {
 	public void setDataEvento(LocalDate dataEvento) {
 		this.dataEvento = dataEvento;
 	}
-	
-	public Ingresso toIngresso() {
-		Ingresso ingresso = new Ingresso();
-		ingresso.setNomeEvento(this.getNomeEvento());
-		ingresso.setDataEHorario(this.getDataEvento().toString()+" as "+this.getHoraEvento().toString());
-		ingresso.setLocalEvento(this.getCasaDeShow().getNomeCasa());
-		ingresso.setValorIngresso(this.getValorIngresso());
-				
-		return ingresso;
-	}
-	
+		
 	
 }

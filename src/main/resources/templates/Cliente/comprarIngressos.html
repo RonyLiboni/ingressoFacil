@@ -19,18 +19,17 @@
 		        <p class="card-text">Preço unitário: <span th:text="'R$' + ${#numbers.formatDecimal(evento.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></p>
 		        <p class="card-text">Local: <span th:text="${evento.casaDeShow}"></p>
 		        
-		         	 
-		       	 <form method="POST" th:object="${ingresso}" th:action="@{/comprar/resumoCompra}">
-																
+		       	 <form method="POST" th:object="${ingresso}" th:action="@{|/comprar/resumoCompra?id=${evento.id}|}">
+		       	 																				
 						<div class="form-group mb-3">
-							<label for="qtdIngressos">Quantidade</label>
-							<input	name="qtdIngressos" class="form-control"  required type="number" th:errorclass="is-invalid" 
+							<label for="quantidadeIngressosComprados">Quantidade</label>
+							<input class="form-control" required type="number" th:errorclass="is-invalid" 
 							th:field="${ingresso.quantidadeIngressosComprados}" placeholder="Quantos ingressos você quer comprar?"></input>
 							<div class="alert alert-danger"
 								th:if="${#fields.hasErrors('quantidadeIngressosComprados')}"
-								th:errors="${evento.quantidadeIngressos}"></div>
+								th:errors="${ingresso.quantidadeIngressosComprados}"></div>
 						</div>
-						<button type="submit" class="btn btn-primary">Ir para resumo da compra</button>
+						<button type="submit" class="btn btn-success">Finalizar compra</button>
 				</form>         
 
 		      </div>

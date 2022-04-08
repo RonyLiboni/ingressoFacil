@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/home","/cadastro","/cadastro/cadastrarCliente")
 			.permitAll()
 		.antMatchers("/casaDeShow/**","/evento/**").hasRole("ADM")
-		.antMatchers("/comprar/**").hasRole("USER")
+		.antMatchers("/comprar/**","/minhasCompras").hasRole("USER")
 		.anyRequest()
 			.authenticated()
 		.and()

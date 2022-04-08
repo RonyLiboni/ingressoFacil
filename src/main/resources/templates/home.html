@@ -26,10 +26,7 @@
 		        <p class="card-text">Preço: <span th:text="'R$' + ${#numbers.formatDecimal(evento.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></p>
 		        <p class="card-text">Local: <span th:text="${evento.casaDeShow}"></p>
 		        <p class="card-text">Gênero: <span th:text="${evento.generoMusical}"></p>
-		        		    	
-		          	 
-		       	 
-		       	 
+		        		    		       	 
 		       	 <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-primary text-center" 
 		        	onclick="return confirm('Você precisa estar logado para comprar!')">Comprar ingresso</a>
 		       	 
@@ -37,8 +34,7 @@
 		       	 class="btn btn-primary text-center" >Comprar ingresso</a>
 		       	     		        
 		        <a sec:authorize="hasRole('ROLE_ADM')" href="#" class="btn btn-primary text-center" 
-		        	onclick="return confirm('botão ilustrativo, ADMs precisam comprar através de uma conta de usuário, beleza?')">Comprar ingresso</a>
-		        
+		        	onclick="return confirm('botão ilustrativo, ADMs precisam comprar através de uma conta de usuário, deslogue e cadastre um usuario')">Comprar ingresso</a>
 		        
 		      </div>
 		    </div>

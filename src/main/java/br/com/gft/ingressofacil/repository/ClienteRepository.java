@@ -8,4 +8,5 @@ import br.com.gft.ingressofacil.model.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository <Cliente, String>{
 	
+	Cliente findByUsername(String username);
 }

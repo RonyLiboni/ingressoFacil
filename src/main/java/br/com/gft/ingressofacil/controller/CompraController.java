@@ -1,11 +1,11 @@
 package br.com.gft.ingressofacil.controller;
 
-import javax.validation.Valid;
+import java.security.Principal;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.gft.ingressofacil.model.Evento;
 import br.com.gft.ingressofacil.model.Ingresso;
+import br.com.gft.ingressofacil.service.ClienteService;
 import br.com.gft.ingressofacil.service.EventoService;
 
 
@@ -22,35 +23,33 @@ public class CompraController {
 	
 	@Autowired
 	private EventoService eventoService;
-	
+	@Autowired
+	private ClienteService clienteService;
 	
 	
 	@GetMapping
-	public String escolherQuantidadeDeIngressos( Model model, Ingresso ingresso, Long id ) {
+	public String escolherQuantidadeDeIngressos( Model model, @RequestParam Long id, Ingresso ingresso ) {
 	
-		Evento evento = eventoService.acharPeloId(id);
-		
+		Evento evento = eventoService.acharPeloId(id);		
 		model.addAttribute("evento", evento);
-		model.addAttribute("ingresso", ingresso);
-		
 		
 		return "cliente/comprarIngressos";
 	}
 	
-	
 	@PostMapping("/resumoCompra")
-	public String resumoCompra(Ingresso ingresso, Model model,Evento evento,  Integer quantidadeIngressosComprados) {
+	public String resumoCompra(Ingresso ingresso, Model model, @RequestParam Long id, Principal principal) {
 		
+		eventoService.atualizaDadosDoEvento(id, ingresso.getQuantidadeIngressosComprados());
 		
+		ingresso = eventoService.toIngresso(id, ingresso);
 		
+		clienteService.atualizaHistoricoDoCliente(principal.getName(), ingresso);
 		
-		return "redirect:/home";
+		model.addAttribute("ingresso", ingresso);
+		model.addAttribute("mensagem", "Compra concluida com sucesso!");
+		
+		return "cliente/minhasCompras";
 	}
 	
-	@PostMapping
-	public String finalizarCompra() {
-		
-		return "";
-	}
 	
 }

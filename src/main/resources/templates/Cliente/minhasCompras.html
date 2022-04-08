@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{menu-template :: head}"></head>
+
+
+<div sec:authorize="!isAuthenticated()"><header th:replace="~{menu-template :: header-usuarioNaoLogado}"></header></div>
+<div sec:authorize="hasRole('ROLE_ADM')"><header th:replace="~{Admin/menu-template-adm :: header-adm}"></header></div>
+<div sec:authorize="hasRole('ROLE_USER')"><header th:replace="~{Cliente/menu-template-cliente :: header-cliente}"></header></div>
+
+<body>
+	<h3 class="text-center" sec:authorize="isAuthenticated()">Histórico de <span sec:authentication="name"></span></h3>
+	<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+	
+	<div th:if="${ingresso} != null">
+	<div class="row" th:object="${ingresso}">
+	<div  class="col-sm-3">
+	      <div class="card mb-3 shadow-sm">
+	        <img class="card-img-top img-thumbnail" th:src="${ingresso.imagemDoEvento}" height="200px">
+	        <div class="card-body text-center">
+	          <h5 class="card-title text-uppercase text-center mb-4" th:text="${ingresso.nomeEvento}"></h5>
+	          <p class="card-text" th:text="'Local: ' + ${ingresso.localEvento}"></p>
+	          <p class="card-text" th:text="'Data Evento: ' + ${ingresso.dataEHorario}"></p>
+	          <p class="card-text" th:text="'Valor Ingresso: R$ ' + ${#numbers.formatDecimal(ingresso.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></p>
+	          <p class="card-text" th:text="'Quantidade de ingressos comprada: ' + ${ingresso.quantidadeIngressosComprados}"></p>
+	          <p class="card-text" th:text="'Valor total: R$ ' + ${#numbers.formatDecimal(ingresso.totalDaCompra, 0, 'POINT', 2, 'COMMA')}"></p>
+	        </div>
+	      </div>
+    	</div>
+    </div>
+	</div>
+
+	<div th:if="${not #lists.isEmpty(listaIngressos)}">   	
+	 <div class="row">
+	    <div class="col-sm-3" th:each="ingresso: ${listaIngressos}">
+	      <div class="card mb-3 shadow-sm">
+	        <img class="card-img-top" th:src="${ingresso.imagemDoEvento}" height="200px">
+	        <div class="card-body text-center">
+	          <h5 class="card-title text-uppercase text-center mb-4" th:text="${ingresso.nomeEvento}"></h5>
+	          <p class="card-text" th:text="'Local: ' + ${ingresso.localEvento}"></p>
+	          <p class="card-text" th:text="'Data Evento: ' + ${ingresso.dataEHorario}"></p>
+	          <p class="card-text" th:text="'Valor Ingresso: R$ ' + ${#numbers.formatDecimal(ingresso.valorIngresso, 0, 'POINT', 2, 'COMMA')}"></p>
+	          <p class="card-text" th:text="'Quantidade de ingressos comprada: ' + ${ingresso.quantidadeIngressosComprados}"></p>
+	          <p class="card-text" th:text="'Valor total: R$ ' + ${#numbers.formatDecimal(ingresso.totalDaCompra, 0, 'POINT', 2, 'COMMA')}"></p>
+	        </div>
+	      </div>
+    	</div>
+    </div>
+ </div>
+
+	<div th:replace="~{menu-template :: scripts}"></div>
+</body>
+</html>

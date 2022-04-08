@@ -3,6 +3,7 @@ package br.com.gft.ingressofacil.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ public class Cliente {
 	private String username; 
 	@NotBlank(message="Esse campo não pode estar vazio")
 	private String password;
+	@ElementCollection
 	@Embedded
 	private List<Ingresso> ingressos = new ArrayList<>();
 	
@@ -49,6 +51,8 @@ public class Cliente {
 		this.password = password;
 	}
 		
-	
+	public void adicionaIngresso(Ingresso ingresso) {
+		this.ingressos.add(ingresso);
+	}
 	
 }
