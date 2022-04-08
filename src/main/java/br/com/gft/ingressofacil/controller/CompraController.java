@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.gft.ingressofacil.model.Evento;
 import br.com.gft.ingressofacil.model.Ingresso;
@@ -35,20 +37,23 @@ public class CompraController {
 		return "cliente/comprarIngressos";
 	}
 	
+	
 	@PostMapping("/resumoCompra")
-	public String resumoCompra(Ingresso ingresso, Model model, @RequestParam Long id, Principal principal) {
+	public ModelAndView resumoCompra(Ingresso ingresso, @RequestParam Long id, Principal principal, RedirectAttributes redirectAttributes) {
+		
+		ModelAndView mv = new ModelAndView("redirect:/minhasCompras");
 		
 		eventoService.atualizaDadosDoEvento(id, ingresso.getQuantidadeIngressosComprados());
-		
 		ingresso = eventoService.toIngresso(id, ingresso);
 		
 		clienteService.atualizaHistoricoDoCliente(principal.getName(), ingresso);
 		
-		model.addAttribute("ingresso", ingresso);
-		model.addAttribute("mensagem", "Compra concluida com sucesso!");
-		
-		return "cliente/minhasCompras";
+		redirectAttributes.addFlashAttribute("mensagem", "Compra concluida com sucesso!");
+		redirectAttributes.addFlashAttribute("ingresso", ingresso);
+			
+		return mv;
 	}
+	
 	
 	
 }

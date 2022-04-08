@@ -8,7 +8,7 @@
 <div sec:authorize="hasRole('ROLE_USER')"><header th:replace="~{Cliente/menu-template-cliente :: header-cliente}"></header></div>
 
 <body>
-	<h3 class="text-center" sec:authorize="isAuthenticated()">Histórico de <span sec:authentication="name"></span></h3>
+	
 	<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
 	
 	<div th:if="${ingresso} != null">
@@ -28,7 +28,9 @@
     	</div>
     </div>
 	</div>
-
+	
+	<h3 class="text-center" sec:authorize="isAuthenticated()">Histórico de <span sec:authentication="name"></span></h3>
+	
 	<div th:if="${not #lists.isEmpty(listaIngressos)}">   	
 	 <div class="row">
 	    <div class="col-sm-3" th:each="ingresso: ${listaIngressos}">
