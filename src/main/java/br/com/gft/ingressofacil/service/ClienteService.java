@@ -69,6 +69,8 @@ public class ClienteService {
 		return cliente.getIngressos();
 	}
 	
-	
+	public Integer quantidadeDeIngressosVendidosPorEvento(Long eventoId) {
+		return clienteRepository.quantidadeDeIngressosVendidosPorEvento(eventoId);
+	}
 	
 }

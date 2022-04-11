@@ -15,6 +15,9 @@
 	</div>
 
 	<div class="container text-left row mt-2" th:each="evento : ${listaEventos}">
+		
+		<div th:if="${evento.quantidadeIngressosDisponiveis != 0}"> 
+		 
 		 <div class="row">
 		  <div class="col-sm-6">
 		    <div class="card">
@@ -40,6 +43,9 @@
 		    </div>
 		  </div>
 		</div>
+	
+		</div>
+	
 	</div>
 
 	<div th:replace="~{menu-template :: scripts}"></div>

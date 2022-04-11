@@ -6,6 +6,9 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.gft.ingressofacil.model.CasaDeShow;
@@ -18,6 +21,8 @@ import br.com.gft.ingressofacil.repository.EventoRepository;
 public class EventoService {
 
 	private final EventoRepository eventoRepository;
+	@Autowired
+	private ClienteService clienteService;
 
 	public EventoService(EventoRepository eventoRepository) {
 		this.eventoRepository = eventoRepository;
@@ -41,19 +46,19 @@ public class EventoService {
 
 	public void atualizaDadosDoEvento(Long id, Integer quantidadeIngressosComprados) {
 		Evento evento = acharPeloId(id);
-		
-		evento.setQuantidadeIngressosVendidos(quantidadeIngressosComprados + 
-				evento.getQuantidadeIngressosVendidos());
-		
+
+		evento.setQuantidadeIngressosVendidos(quantidadeIngressosComprados + evento.getQuantidadeIngressosVendidos());
+
 		evento.setQuantidadeIngressosDisponiveis(
 				evento.getQuantidadeIngressos() - evento.getQuantidadeIngressosVendidos());
-		
+
 		eventoRepository.save(evento);
-		
+
 	}
 
 	public Ingresso toIngresso(Long id, Ingresso ingresso) {
 		Evento evento = acharPeloId(id);
+		ingresso.setEventoId(id);
 		ingresso.setNomeEvento(evento.getNomeEvento());
 		ingresso.setLocalEvento(evento.getCasaDeShow().getNomeCasa());
 		ingresso.setDataEHorario(evento.getDataEvento().toString() + " as " + evento.getHoraEvento().toString());
@@ -137,5 +142,36 @@ public class EventoService {
 		salvar(evento6);
 	}
 
+	public @Valid Evento atualizaAtributosEvento(@Valid Evento evento, String username) {
+
+		Long idDoEvento = evento.getId();
+		Integer qtdIngressosVendidos = clienteService.quantidadeDeIngressosVendidosPorEvento(idDoEvento);
+		;
+
+		if (qtdIngressosVendidos == null)
+			qtdIngressosVendidos = 0;
+
+		evento.setQuantidadeIngressosDisponiveis(evento.getQuantidadeIngressos() - qtdIngressosVendidos);
+		evento.setQuantidadeIngressosVendidos(qtdIngressosVendidos);
+
+		if (evento.getImagemDoEvento().equals(null) || evento.getImagemDoEvento().equals("")) // se o adm nao colocar
+																								// uma imagem essa é a
+																								// padrao
+			evento.setImagemDoEvento(
+					"https://ancoracomunicacao.com.br/images/up/News/72/1200x800-1/72a50b5-musica-1200x1200.jpg");
+
+		return evento;
+	}
+
+	public boolean excedeQtdIngressosDisponiveis(Long id, Integer quantidadeIngressosComprados) {
+		Evento evento = acharPeloId(id);
+		boolean excedeuLimite = evento.getQuantidadeIngressosDisponiveis() - quantidadeIngressosComprados < 0;
+
+		if (excedeuLimite) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -43,6 +44,7 @@ public class Evento {
 	@NotNull @Digits(fraction=0 ,integer =10)
 	private Integer quantidadeIngressos;
 	private Integer quantidadeIngressosVendidos=0;
+	@Min(value=0, message="Não temos tantos ingressos disponíveis, tente uma quantidade menor")
 	private Integer quantidadeIngressosDisponiveis;
 	private String imagemDoEvento;
 		

@@ -3,6 +3,7 @@ package br.com.gft.ingressofacil.model;
 import java.math.BigDecimal;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Embeddable
@@ -11,12 +12,21 @@ public class Ingresso {
 	private String localEvento;
 	private String dataEHorario;	
 	private BigDecimal valorIngresso;
-	@NotNull
+	@NotNull(message="Você deve adicionar pelo menos 1 ingresso na compra")
+	@Min(value=1, message="Você deve comprar pelo menos 1 ingresso")
 	private Integer quantidadeIngressosComprados;
 	private BigDecimal totalDaCompra;
 	private String ImagemDoEvento;
+	private Long eventoId;
 	
 	
+	
+	public Long getEventoId() {
+		return eventoId;
+	}
+	public void setEventoId(Long eventoId) {
+		this.eventoId = eventoId;
+	}
 	public String getImagemDoEvento() {
 		return ImagemDoEvento;
 	}
